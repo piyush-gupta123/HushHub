@@ -28,13 +28,13 @@ Follow the steps below to set up and run the application on your local machine.
 
 ### Installing Dependencies
 
-Navigate to the `server` and `client` directories and install the dependencies.
+Navigate to the `server` and `hushhub` directories and install the dependencies.
 
 ```bash
 cd server
 npm install
 
-cd ../client
+cd ../hushhub
 npm install
 
 In the server directory, create a .env file and configure the MongoDB connection URI.
@@ -44,5 +44,5 @@ Then, start the server.
 npm start
 
 Start the Frontend Development Server
-In the client directory, start the React development server.
+In the hushhub directory, start the React development server.
 npm run dev
