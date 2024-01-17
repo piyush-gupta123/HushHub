@@ -10,7 +10,11 @@ mongoose.set("strictQuery", true);
 const app = Express();
 dotenv.config();
 app.use(cookieParser())
-app.use(cors());
+app.use(cors({
+  origin: ["https://deploy-mern-1whq.vercel.app"],
+  methods: ["GET", "POST"],
+  credentials: true,
+}));
 // app.use(express.urlencoded({extended:true}))
 app.use(Express.json());
 app.use("/user", userRouter);
