@@ -5,7 +5,7 @@ import SecretCard from "./SecretCard";
 function Feed() {
   const [secrets, setSecrets] = useState();
   const getAllUsers = async () => {
-    const res = await axios.get("https://hush-hub-api.vercel.app//secret");
+    const res = await axios.get("https://hush-hub-api.vercel.app/secret");
 
     if (res.status !== 200) {
       return console.log("Some Error Occurred");
