@@ -1,8 +1,9 @@
 import express from "express";
-import { secretCreate } from "../controllers/secretCreator.js";
+import { secretCreate, secretGet } from "../controllers/secretCreator.js";
 
 const secretRouter = express.Router();
 
+secretRouter.get('/',secretGet)
 secretRouter.post('/create',secretCreate)
 
 export default secretRouter;

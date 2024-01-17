@@ -3,6 +3,20 @@ import User from "../models/user.js";
 import Secret from "../models/secretPost.js";
 import mongoose from "mongoose";
 
+export const secretGet = async(req,res,next)=>{
+  try{
+    const secrets = await Secret.find().populate("user")
+    if(!secrets){
+      return res.status(404).json({Message: "No Secrets found!!"})
+    }
+
+    return res.status(200).json({secrets});
+  }
+  catch(err){
+    next(err)
+  }
+}
+
 export const secretCreate = async (req, res, next) => {
   try {
     // const userId = req.params
