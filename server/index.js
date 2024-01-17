@@ -11,9 +11,10 @@ const app = Express();
 dotenv.config();
 app.use(cookieParser())
 app.use(cors({
-  origin: ["https://deploy-mern-1whq.vercel.app"],
-  methods: ["GET", "POST"],
-  credentials: true,
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
 }));
 // app.use(express.urlencoded({extended:true}))
 app.use(Express.json());
