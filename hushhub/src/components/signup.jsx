@@ -27,7 +27,7 @@ export default function () {
     e.preventDefault();
     try {
       const response = await axios
-        .post(`http://localhost:5000/user/signup/`, {
+        .post(`https://hush-hub-api.vercel.app/user/signup/`, {
           username: inputs.username,
           email: inputs.email,
           password: inputs.password,

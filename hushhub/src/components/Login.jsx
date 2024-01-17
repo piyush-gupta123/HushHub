@@ -12,7 +12,7 @@ function Login() {
   function nagigateToOtp() {
     if (email) {
       const data = axios
-        .post("http://localhost:5000/forgotPassword", {
+        .post("https://hush-hub-api.vercel.app/forgotPassword", {
           email: email,
         })
         .then(() => <ForgotPassword />)
@@ -47,7 +47,7 @@ function Login() {
     try {
       // console.log(inputs)
       const response = await axios
-        .post(`http://localhost:5000/user/signin/`, {
+        .post(`https://hush-hub-api.vercel.app/user/signin/`, {
           email: inputs.email,
           password: inputs.password,
         })
@@ -127,7 +127,7 @@ function Login() {
                     </label>
                   </div>
                   <a
-                    href="/user/forgotPassword"
+                    href="/forgotPassword"
                     onClick={() => nagigateToOtp()}
                     className="text-gray-800"
                   >
