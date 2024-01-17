@@ -4,10 +4,10 @@ import jwt from "jsonwebtoken"
 import { createError } from "../error.js";
 import nodemailer from "nodemailer"
 
-const sendMail = async(email)=>{
+const sendMail = async(name,email,token)=>{
     try{
         const transporter = nodemailer.createTransport({
-            host: 'gmail',
+            host: 'smtp.gmail.com',
             port: 587,
             secure: false,
             requireTLS: true,
@@ -25,7 +25,7 @@ const sendMail = async(email)=>{
             <html lang="en" >
             <head>
               <meta charset="UTF-8">
-              <title>CodePen - OTP Email Template</title>
+              <title>CodePen - Reset Email Template</title>
               
             
             </head>
@@ -34,18 +34,12 @@ const sendMail = async(email)=>{
             <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
               <div style="margin:50px auto;width:70%;padding:20px 0">
                 <div style="border-bottom:1px solid #eee">
-                  <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Koding 101</a>
+                  <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">HushHub</a>
                 </div>
-                <p style="font-size:1.1em">Hi,</p>
-                <p>Thank you for choosing HushHub. Use the following OTP to complete your Password Recovery Procedure. OTP is valid for 5 minutes</p>
-                <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${OTP}</h2>
-                <p style="font-size:0.9em;">Regards,<br />Koding 101</p>
+                <p style="font-size:1.1em">Hi ${name},</p>
+                <p>Thank you for choosing HushHub. Use the following link to complete your Password Recovery Procedure.<a href="http://127.0.0.1:5000/user/resetPassword?token=${token}">reset your Password</a></p>
+                <p style="font-size:0.9em;">Regards,<br />HushHub</p>
                 <hr style="border:none;border-top:1px solid #eee" />
-                <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
-                  <p>Koding 101 Inc</p>
-                  <p>1600 Amphitheatre Parkway</p>
-                  <p>California</p>
-                </div>
               </div>
             </div>
             <!-- partial -->
@@ -149,8 +143,27 @@ export const forgotPassword = async(req,res,next)=>{
         if(!userExists){
             return createError(404, "User does not exists")
         }
-        sendMail(userExists.email)
+        sendMail(userExists.username,userExists.email,userExists.token)
         return res.status(201).json({Message: "Please check your mail inbox to reset your password!!"})
+    }
+    catch(err){
+        next(err)
+    }
+}
+
+export const resetPassword = async(req,res,next)=>{
+    try{
+        const token = req.query.token
+        const tokenData = await User.findOne({token: token})
+
+        if(!token){
+            return res.status(404).json({Message: "This link has been expired!"})
+        }
+
+        const password=req.body.password
+        const hashedPassword =  bcrypt.hashSync(password,10)
+        const userData = await User.findByIdAndUpdate({ _id: tokenData._id},{$set: {password: hashedPassword, token: ''}},{new:true})
+        return res.status(200).json({Message: "User Password has been reset!!",data: userData})
     }
     catch(err){
         next(err)
