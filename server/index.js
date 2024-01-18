@@ -1,15 +1,14 @@
 import Express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
+// import cors from "cors";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes.js";
-import cookieParser from "cookie-parser";
+// import cookieParser from "cookie-parser";
 import secretRouter from "./routes/secretRoute.js";
 mongoose.set("strictQuery", true);
 
-app.use(cors());
 app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://hush-hub.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -17,7 +16,7 @@ app.use(function(req, res, next) {
 })
 const app = Express();
 dotenv.config();
-app.use(cookieParser())
+// app.use(cookieParser())
 app.use(Express.json());
 app.use("/user", userRouter);
 app.use("/secret", secretRouter);
