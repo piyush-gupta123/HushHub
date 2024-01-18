@@ -3,7 +3,7 @@ import { AppBar, Tab, Tabs, Toolbar } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 const linksArr = ["home", "login", "signup"];
-const loggedInLinks = ["home", "add"];
+const loggedInLinks = ["home", "add", "logout"];
 const Header = () => {
   const [value, setValue] = useState();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);

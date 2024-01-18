@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Add from "./components/Add";
 import "./styles/globals.css";
 import Signup from "./components/signup";
+import Logout from "./components/Logout";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -34,7 +35,12 @@ function App() {
             </Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/signup" element={<Signup />} />
-            {isLoggedIn && <Route path="/add" element={<Add />} />}
+            {isLoggedIn && (
+              <>
+                <Route path="/add" element={<Add />} />
+                <Route path="/logout" element={<Logout />} />
+              </>
+            )}
           </Routes>
         </section>
       </main>

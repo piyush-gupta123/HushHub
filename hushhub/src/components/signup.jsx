@@ -13,6 +13,8 @@ export default function () {
   });
   const dispatch = useDispatch();
   const onResReceived = (data) => {
+    console.log(data)
+    localStorage.setItem("userId", data.newUser._id);
     dispatch(authActions.login());
     navigate("/");
   };
@@ -23,15 +25,27 @@ export default function () {
     }));
   };
 
+  const getData = async () => {
+    const response = await axios
+      .post(`https://hush-hub-api.vercel.app/user/signup/`, {
+        username: inputs.username,
+        email: inputs.email,
+        password: inputs.password,
+      })
+      .catch((err) => console.log(err));
+
+    if (response.status !== 200 || response.status !== 201) {
+      console.log("Something Went Wrong. Please Try Again!!");
+    }
+
+    const res = await response.data;
+    return res;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios
-        .post(`https://hush-hub-api.vercel.app/user/signup/`, {
-          username: inputs.username,
-          email: inputs.email,
-          password: inputs.password,
-        })
+      getData()
         .then(onResReceived)
         .catch((err) => {
           console.log(err);

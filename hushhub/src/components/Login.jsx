@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ForgotPassword from "./ForgotPassword";
-import { useDispatch } from "react-redux"
+import { useDispatch } from "react-redux";
 import authActions from "../redux";
 
 function Login() {
   const navigate = useNavigate();
-  const [inputs, setInputs] = useState({ email: '', password: '' });
+  const [inputs, setInputs] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   function nagigateToOtp() {
     if (email) {
@@ -22,17 +22,12 @@ function Login() {
     return alert("Please enter your email");
   }
 
-  const onResReceived = (data)=>{
-    // if(isSignUp){
-    //   localStorage.setItem("userId",data.user.token)
-    // }
-    // else{
-    //   localStorage.setItem("userId",data.)
-    // }
-
-    dispatch(authActions.login())
-    navigate('/')
-  }
+  const onResReceived = (data) => {
+    console.log(data)
+    localStorage.setItem("userId", data.user._id);
+    dispatch(authActions.login());
+    navigate("/");
+  };
 
   const handleChange = (e) => {
     // e.preventDefault()
@@ -42,27 +37,32 @@ function Login() {
     }));
   };
 
+  const getData = async () => {
+    const response = await axios
+      .post(`https://hush-hub-api.vercel.app/user/signin/`, {
+        email: inputs.email,
+        password: inputs.password,
+      })
+      .catch((err) => console.log(err));
+
+    if (response.status !== 200 || response.status !== 201) {
+      console.log("Something Went Wrong. Please Try Again!!");
+    }
+
+    const res = await response.data;
+    return res;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       // console.log(inputs)
-      const response = await axios
-        .post(`https://hush-hub-api.vercel.app/user/signin/`, {
-          email: inputs.email,
-          password: inputs.password,
-        })
+      // https://hush-hub-api.vercel.app
+      getData()
         .then(onResReceived)
         .catch((err) => {
           console.log(err);
         });
-
-      // if (response.status !== 200 && response.status !== 201) {
-      //   return console.log("Unable To Authenticate");
-      // }
-
-      // const resData = await response.data;
-      // // console.log(resData)
-      // return resData;
     } catch (err) {
       console.log(err);
     }
