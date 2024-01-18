@@ -7,13 +7,13 @@ import userRouter from "./routes/userRoutes.js";
 import secretRouter from "./routes/secretRoute.js";
 mongoose.set("strictQuery", true);
 
-app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://hush-hub.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+app.use(async (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://hush-hub.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
-})
+});
 const app = Express();
 dotenv.config();
 // app.use(cookieParser())
@@ -21,17 +21,18 @@ app.use(Express.json());
 app.use("/user", userRouter);
 app.use("/secret", secretRouter);
 const PORT = process.env.PORT || 5000;
-mongoose.connect(process.env.MONGODB_URL)
-.then(()=>`Server Is running at ${PORT}`)
-.then(()=>app.listen(PORT))
-.catch((err) => console.log(err));
+mongoose
+  .connect(process.env.MONGODB_URL)
+  .then(() => `Server Is running at ${PORT}`)
+  .then(() => app.listen(PORT))
+  .catch((err) => console.log(err));
 
 app.use((err, req, res, next) => {
-    const status = err.status || 500;
-    const message = err.message || "Something Went Wrong!!";
-    return res.status(status).json({
-      status: false,
-      status,
-      message,
-    });
+  const status = err.status || 500;
+  const message = err.message || "Something Went Wrong!!";
+  return res.status(status).json({
+    status: false,
+    status,
+    message,
   });
+});
