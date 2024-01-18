@@ -1,7 +1,6 @@
 import User from "../models/user.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { createError } from "../error.js";
 import nodemailer from "nodemailer"
 
 const sendMail = async(name,email,token)=>{
@@ -66,7 +65,7 @@ export const getAllUsers = async(req,res,next)=>{
     try{
         const users = await User.find();
         if(!users){
-            return createError(404,"No user Found!")
+            return res.status(404).json({Message: "No user Found!"})
         }
 
         return res.status(200).json({users})
@@ -80,12 +79,12 @@ export const signUpUser = async(req,res,next)=>{
     try{
         const {username, email, password} = req.body
         if(!username || !email || !password){
-            return createError(404,"Enter All The Credentials!!")
+            return res.status(404).json({Message: "Please enter all the credentials!!"})
         }
 
         const existingUser = await User.findOne({email});
         if(existingUser){
-            return createError(422,"User already Exists!!")
+            return res.status(422).json({Message: "User already Exists!!"})
         }
         const salt=10;
         const hashedPassword = bcrypt.hashSync(password,salt);
@@ -110,17 +109,17 @@ export const signInUser = async(req,res,next)=>{
     try{
         const {email,password} = req.body;
         if(!email || !password){
-            return createError(404,"Please enter all the credentials!!")
+            return res.status(404).json({Message: "Please enter all the credentials!!"})
         }
         const user = await User.findOne({email});
         if(!user){
-            return createError(404,"User does not exists!!")
+            return res.status(404).json({Message: "User does not exists"})
         }
 
         const isPassword = bcrypt.compareSync(password, user.password)
 
         if(!isPassword){
-            return createError(400,"Invalid Credentials!")
+            return res.status(404).json({Message: "Invalid Credentials!"})
         }
 
         const token = jwt.sign({id: user._id},process.env.SECRET_KEY,{
@@ -141,7 +140,7 @@ export const forgotPassword = async(req,res,next)=>{
         const { email } = req.body
         const userExists = await User.findOne({email})
         if(!userExists){
-            return createError(404, "User does not exists")
+            return res.status(404).json({Message: "User does not exists"})
         }
         sendMail(userExists.username,userExists.email,userExists.token)
         return res.status(201).json({Message: "Please check your mail inbox to reset your password!!"})

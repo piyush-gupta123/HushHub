@@ -10,13 +10,13 @@ mongoose.set("strictQuery", true);
 
 const app = Express();
 app.use(cors());
-app.use(async (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://hush-hub.vercel.app");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  next();
-});
+// app.use(async (req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "https://hush-hub.vercel.app");
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+//   res.setHeader("Access-Control-Allow-Credentials", true);
+//   next();
+// });
 dotenv.config();
 // app.use(cookieParser())
 app.get("/",()=>{

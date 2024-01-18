@@ -1,4 +1,3 @@
-import { createError } from "../error.js";
 import User from "../models/user.js";
 import Secret from "../models/secretPost.js";
 import mongoose from "mongoose";
@@ -22,12 +21,12 @@ export const secretCreate = async (req, res, next) => {
     // const userId = req.params
     const { value, user } = req.body;
     if (!value || !user) {
-      return createError(422, "Please enter a secret to post!");
+      return res.status(422).json({Message: "Please enter a secret to post!"})
     }
 
     const existingUser = await User.findById(user);
     if (!existingUser) {
-      return createError(404, "User does not exists!");
+      return res.status(404).json({Message: "User does not exists!"})
     }
 
     if (existingUser.isSecret) {
@@ -48,7 +47,7 @@ export const secretCreate = async (req, res, next) => {
       session.commitTransaction();
 
       if (!newSecret) {
-        return createError(500, "Something went wrong!!");
+        return res.status(500).json({Message: "Something went wrong!!"})
       }
 
       return res.status(201).json({ newSecret });
